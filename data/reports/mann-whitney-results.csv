@@ -1,0 +1,9 @@
+comparison,n_a,n_b,median_a,median_b,mean_a,mean_b,u_statistic,p_value,significant,cliffs_delta,effect_size,reduction_pct,rps,metric,bonferroni_significant
+PBS@500RPS vs ZTA-Naif@500RPS,30,30,4.2793,4.2951,4.2738,4.2841,429.0,0.761828,False,-0.0467,negligible,-0.37,500.0,p99_latency_pbs_vs_naive,
+ZTA-Naif@500RPS vs ZTA-Cache@500RPS,30,30,4.2951,4.2166,4.2841,4.2407,564.0,0.093341,False,0.2533,small,1.83,500.0,p99_latency_ms,
+ZTA-Naif@2000RPS vs ZTA-Cache@2000RPS,30,30,16.2428,16.7354,16.155,16.6152,392.0,0.395267,False,-0.1289,negligible,-3.03,2000.0,p99_latency_ms,
+PBS@500RPS vs ZTA-Cache@500RPS,30,30,4.2793,4.2166,4.2738,4.2407,547.0,0.153667,False,0.2156,small,1.47,500.0,p99_latency_pbs_vs_cache,
+Static TTL vs Graph-aware TTL,30,30,1317.522,1322.4888,1323.9281,1320.8159,450.0,1.0,False,0.0,negligible,-0.38,,p99_latency_ttl,
+Linear vs Fan-out,30,30,16.7354,1322.4888,16.6152,1320.8159,0.0,0.0,True,-1.0,large,-7802.32,,topology_posthoc,True
+Linear vs Mesh,30,30,16.7354,499.2461,16.6152,497.3643,0.0,0.0,True,-1.0,large,-2883.17,,topology_posthoc,True
+Fan-out vs Mesh,30,30,1322.4888,499.2461,1320.8159,497.3643,900.0,0.0,True,1.0,large,62.25,,topology_posthoc,True

@@ -1,0 +1,124 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opa
+  namespace: zta-research
+  labels:
+    app: opa
+    component: pdp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opa
+  template:
+    metadata:
+      labels:
+        app: opa
+        component: pdp
+    spec:
+      containers:
+      - name: opa
+        image: openpolicyagent/opa:0.60.0
+        ports:
+        - name: http
+          containerPort: 8181
+        args:
+        - "run"
+        - "--server"
+        - "--addr=0.0.0.0:8181"
+        - "--log-level=info"
+        - "--log-format=json"
+        - "--set=decision_logs.console=true"
+        - "/policies/authz.rego"
+        - "/policies/data.json"
+        volumeMounts:
+        - name: policy-volume
+          mountPath: /policies
+          readOnly: true
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health?bundles
+            port: http
+          initialDelaySeconds: 3
+          periodSeconds: 5
+      volumes:
+      - name: policy-volume
+        configMap:
+          name: opa-policies
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opa
+  namespace: zta-research
+  labels:
+    app: opa
+spec:
+  ports:
+  - name: http
+    port: 8181
+    targetPort: 8181
+  selector:
+    app: opa
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: opa-policies
+  namespace: zta-research
+data:
+  authz.rego: |
+    package authz
+    import future.keywords.if
+    import future.keywords.in
+    default allow := false
+    allow if {
+        some rule in data.service_rules
+        rule.source == input.source_identity
+        rule.target == input.target_identity
+        input.action in rule.allowed_actions
+    }
+    sensitivity := level if {
+        some rule in data.service_rules
+        rule.source == input.source_identity
+        rule.target == input.target_identity
+        level := rule.sensitivity
+    }
+    default sensitivity := "medium"
+  data.json: |
+    {
+      "service_rules": [
+        {
+          "source": "spiffe://cluster.local/ns/default/sa/frontend",
+          "target": "spiffe://cluster.local/ns/default/sa/productcatalogservice",
+          "allowed_actions": ["GET"],
+          "sensitivity": "low"
+        },
+        {
+          "source": "spiffe://cluster.local/ns/default/sa/frontend",
+          "target": "spiffe://cluster.local/ns/default/sa/cartservice",
+          "allowed_actions": ["GET", "POST", "DELETE"],
+          "sensitivity": "medium"
+        },
+        {
+          "source": "spiffe://cluster.local/ns/default/sa/checkoutservice",
+          "target": "spiffe://cluster.local/ns/default/sa/paymentservice",
+          "allowed_actions": ["POST"],
+          "sensitivity": "high"
+        }
+      ]
+    }

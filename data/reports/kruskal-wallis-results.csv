@@ -1,0 +1,5 @@
+groups,h_statistic,p_value,significant,comparison,metric,rps
+Linear | Fan-out | Mesh,79.12,0.0,True,Topology @ 2000 RPS,p99_latency_ms,
+PBS | ZTA-Naif | ZTA-Cache,3.35,0.187625,False,Config @ 500 RPS,p99_latency_ms,500.0
+PBS | ZTA-Naif | ZTA-Cache,0.81,0.668425,False,CPU (%) Overhead @ 500 RPS,cpu_avg_pct,
+PBS | ZTA-Naif | ZTA-Cache,2.46,0.291673,False,Memory (MB) Overhead @ 500 RPS,mem_avg_mb,
