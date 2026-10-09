@@ -2,7 +2,7 @@
 
 [![Artifact Evaluation](https://img.shields.io/badge/Artifact-Available%20%26%20Reproducible-success.svg)](#)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
-[![Traceability](https://img.shields.io/badge/Traceability%20Audit-91%2F91%20PASS-brightgreen.svg)](#quick-start-1-click-verification)
+[![Traceability](https://img.shields.io/badge/Traceability%20Audit-130%2F130%20PASS-brightgreen.svg)](#quick-start-1-click-verification)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 
 Official, standalone **Replication Package & Artifact Evaluation Suite** for the academic paper:
@@ -20,7 +20,7 @@ Verify that **every single empirical number in the paper** matches the underlyin
 python scripts/verify_traceability.py
 ```
 
-Expected output: `HASIL: 91/91 PASS, 0/91 FAIL` across all tables and statistical tests.
+Expected output: `HASIL: 130/130 PASS, 0/130 FAIL` across all tables, statistical tests, and formal mathematical equations.
 
 ---
 

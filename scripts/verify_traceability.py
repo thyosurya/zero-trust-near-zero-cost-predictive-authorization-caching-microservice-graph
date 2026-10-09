@@ -153,6 +153,73 @@ for col, nm, exp_h, exp_p in [("cpu_avg_pct", "CPU", 0.81, 0.668), ("mem_avg_mb"
     check(f"KW {nm} H", h, exp_h, 0.02)
     check(f"KW {nm} p", p, exp_p, 0.002)
 
+# === FORMALISASI PERSAMAAN MATEMATIKA (1-12) ===
+print("\n--- FORMALISASI PERSAMAAN MATEMATIKA (Naskah ↔ Skrip) ---")
+id_path = "paper/naskah-artikel.md" if os.path.exists("paper/naskah-artikel.md") else "draft/naskah-artikel.md"
+en_path = "paper/naskah-artikel-en.md" if os.path.exists("paper/naskah-artikel-en.md") else "draft/en/naskah-artikel-en.md"
+with open(id_path, "r", encoding="utf-8") as f:
+    id_ms = f.read()
+with open(en_path, "r", encoding="utf-8") as f:
+    en_ms = f.read()
+with open("scripts/statistical-analysis.py", "r", encoding="utf-8") as f:
+    stat_code = f.read()
+with open("scripts/scalability-analysis.py", "r", encoding="utf-8") as f:
+    scal_code = f.read()
+with open("scripts/generate-figures.py", "r", encoding="utf-8") as f:
+    fig_code = f.read()
+with open("scripts/generate-figures-en.py", "r", encoding="utf-8") as f:
+    fig_en_code = f.read()
+
+eq_checks = [
+    ("Persamaan (1) in naskah-id", "...(1)" in id_ms),
+    ("Persamaan (1) in naskah-en", "...(1)" in en_ms),
+    ("Persamaan (2) in naskah-id", "...(2)" in id_ms),
+    ("Persamaan (2) in naskah-en", "...(2)" in en_ms),
+    ("Persamaan (2) in generate-figures", "Persamaan (2)" in fig_code),
+    ("Persamaan (2) in generate-figures-en", "Equation (2)" in fig_en_code),
+    ("Persamaan (3) in naskah-id", "...(3)" in id_ms),
+    ("Persamaan (3) in naskah-en", "...(3)" in en_ms),
+    ("Persamaan (3) in statistical-analysis", "Persamaan (3)" in stat_code),
+    ("Persamaan (4) in naskah-id", "...(4)" in id_ms),
+    ("Persamaan (4) in naskah-en", "...(4)" in en_ms),
+    ("Persamaan (4) in statistical-analysis", "Persamaan (4)" in stat_code),
+    ("Persamaan (4) in generate-figures", "Persamaan (4)" in fig_code),
+    ("Persamaan (5) in naskah-id", "...(5)" in id_ms),
+    ("Persamaan (5) in naskah-en", "...(5)" in en_ms),
+    ("Persamaan (5) in statistical-analysis", "Persamaan (5)" in stat_code),
+    ("Persamaan (5) in generate-figures", "Persamaan (5)" in fig_code),
+    ("Persamaan (6) in naskah-id", "...(6)" in id_ms),
+    ("Persamaan (6) in naskah-en", "...(6)" in en_ms),
+    ("Persamaan (6) in statistical-analysis", "Persamaan (6)" in stat_code),
+    ("Persamaan (6) in generate-figures", "Persamaan (6)" in fig_code),
+    ("Persamaan (7) in naskah-id", "...(7)" in id_ms),
+    ("Persamaan (7) in naskah-en", "...(7)" in en_ms),
+    ("Persamaan (7) in statistical-analysis", "Persamaan (7): Uji Kesetaraan TOST" in stat_code),
+    ("Persamaan (8) in naskah-id", "...(8)" in id_ms),
+    ("Persamaan (8) in naskah-en", "...(8)" in en_ms),
+    ("Persamaan (8) in statistical-analysis", "Persamaan (8): Bootstrap" in stat_code),
+    ("Persamaan (9) in naskah-id", "...(9)" in id_ms),
+    ("Persamaan (9) in naskah-en", "...(9)" in en_ms),
+    ("Persamaan (9) in scalability-analysis", "Persamaan (9)" in scal_code),
+    ("Persamaan (10) in naskah-id", "...(10)" in id_ms),
+    ("Persamaan (10) in naskah-en", "...(10)" in en_ms),
+    ("Persamaan (10) in scalability-analysis", "Persamaan (10)" in scal_code),
+    ("Persamaan (11) in naskah-id", "...(11)" in id_ms),
+    ("Persamaan (11) in naskah-en", "...(11)" in en_ms),
+    ("Persamaan (11) in scalability-analysis", "Persamaan (11): M_sidecar" in scal_code),
+    ("Persamaan (12) in naskah-id", "...(12)" in id_ms),
+    ("Persamaan (12) in naskah-en", "...(12)" in en_ms),
+    ("Persamaan (12) in scalability-analysis", "Persamaan (12): BW_distribution" in scal_code),
+]
+
+for label, cond in eq_checks:
+    status = "✅" if cond else "❌"
+    if cond:
+        PASS += 1
+    else:
+        FAIL += 1
+        print(f"  {status} {label}: FAILED TO MATCH!")
+
 # === SUMMARY ===
 print("\n" + "=" * 70)
 total = PASS + FAIL

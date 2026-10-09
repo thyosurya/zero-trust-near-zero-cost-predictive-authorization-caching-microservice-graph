@@ -41,9 +41,15 @@ karena setiap service hanya berkomunikasi dengan subset kecil.
 Proyeksi berdasarkan data eksperimen dan model matematis.
 """
 
+import sys
+import time
 import numpy as np
 import pandas as pd
-import time
+
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8')
 
 # ============================================================
 # DATA EKSPERIMEN (dari testbed 3-node, 3 service)
@@ -72,7 +78,7 @@ def analyze_complexity():
     Analisis Kompleksitas Algoritmik
     ==================================
 
-    Persamaan (7): Kompleksitas Data Plane (per-request)
+    Persamaan (9): Kompleksitas Data Plane (per-request)
         T_request(N) = T_hash + T_hmac + T_nonce = O(1)
 
         di mana:
@@ -82,7 +88,7 @@ def analyze_complexity():
 
         Tidak ada dependensi terhadap N (jumlah service).
 
-    Persamaan (8): Kompleksitas Control Plane (periodik)
+    Persamaan (10): Kompleksitas Control Plane (periodik)
         T_analysis(V, E) = T_brandes + T_rank + T_distribute
                          = O(V·E) + O(E·log E) + O(K)
 
@@ -91,14 +97,14 @@ def analyze_complexity():
         - E = jumlah edge (pasangan service aktif)
         - K = min(E, maxCandidates) ≤ 50
 
-    Persamaan (9): Estimasi jumlah edge pada service mesh
+    Estimasi jumlah edge pada service mesh:
         E_practical ≈ c · V,  c ∈ [2, 5]
 
         Berdasarkan observasi empiris bahwa setiap service dalam
         arsitektur microservice berkomunikasi dengan rata-rata
         2-5 downstream service (Newman, 2019; Richardson, 2018).
 
-    Substitusi (9) ke (8):
+    Substitusi E_practical ke Persamaan (10):
         T_analysis(V) = O(V · cV) + O(cV · log(cV)) + O(K)
                        = O(c · V²) + O(cV · log V) + O(K)
                        ≈ O(V²)  untuk c konstan
@@ -115,7 +121,7 @@ def analyze_complexity():
     exp = EXPERIMENT_DATA
     overhead_ms = exp["zta_naive_p99_ms"] - exp["pbs_p99_ms"]
     print(f"""
-  Persamaan (7): T_request(N) = T_hash + T_hmac + T_nonce = O(1)
+  Persamaan (9): T_request(N) = T_hash + T_hmac + T_nonce = O(1)
 
   Bukti empiris (N = {exp['services']} service):
     - PBS Baseline p99 : {exp['pbs_p99_ms']:.4f} ms
@@ -141,10 +147,9 @@ def analyze_complexity():
     # Brandes betweenness centrality benchmark
     # Menggunakan model: T = a × V² (karena E ≈ cV pada service mesh)
     print("""
-  Persamaan (8): T_analysis(V, E) = O(V·E) + O(E·log E) + O(K)
-
-  Persamaan (9): E_practical ≈ c · V,  c ∈ [2, 5]
-  → Substitusi: T_analysis(V) ≈ O(c · V²) ≈ O(V²)
+  Persamaan (10): T_analysis(V, E) = O(V·E) + O(E·log E) + O(K)
+  Estimasi edge:  E_practical ≈ c · V,  c ∈ [2, 5]
+  → Substitusi ke Persamaan (10): T_analysis(V) ≈ O(c · V²) ≈ O(V²)
 
   Interval analisis: 30 detik (off-path, tidak memengaruhi request)
   → Syarat kelayakan: T_analysis(V) < 30.000 ms
@@ -212,7 +217,7 @@ def analyze_complexity():
     mem_overhead_mb = exp["mem_cache_mb"] - exp["mem_pbs_mb"]
 
     print(f"""
-  Persamaan (10): M_sidecar = K × S_token
+  Persamaan (11): M_sidecar = K × S_token
 
   di mana:
     K = min(E_active, maxCandidates) ≤ {max_candidates}
@@ -245,13 +250,15 @@ def analyze_complexity():
     - Edge map: O(E) entries × ~128 bytes = O(E) memory
     - gonum graph: O(V + E) memory internal
 
-  Persamaan (11): M_analyzer = O(V + E) ≈ O(V + cV) = O(V)
+  Estimasi memori Graph Topology Analyzer:
+    M_analyzer = O(V + E) ≈ O(V + cV) = O(V)
 
   Cache Distributor menyimpan:
     - Active tokens: O(K) entries, K ≤ maxCandidates
     - Revocation nonce set: O(R) entries, R = jumlah token pernah direvokasi
 
-  Persamaan (12): M_distributor = O(K + R)""")
+  Estimasi memori Cache Distributor:
+    M_distributor = O(K + R)""")
 
     for V in [10, 50, 100, 500, 1000]:
         E = 3 * V
@@ -268,7 +275,7 @@ def analyze_complexity():
     print("─" * 70)
 
     print(f"""
-  Persamaan (13): BW_distribution = K × S_token × F_sidecars / T_interval
+  Persamaan (12): BW_distribution = K × S_token × F_sidecars / T_interval
 
   di mana:
     K = min(E_active, 50) token per siklus

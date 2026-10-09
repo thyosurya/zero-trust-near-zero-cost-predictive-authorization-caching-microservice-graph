@@ -60,7 +60,7 @@ Persamaan (6): Uji Kruskal-Wallis H
     Keputusan: H₀ ditolak jika p < α (α = 0,05).
     Post-hoc: Mann-Whitney berpasangan dengan koreksi Bonferroni (α' = α/k').
 
-Persamaan (11): Uji Kesetaraan TOST (Two One-Sided Tests)
+Persamaan (7): Uji Kesetaraan TOST (Two One-Sided Tests)
     H₀₁: θ ≤ -Δ  vs  H₁₁: θ > -Δ   (uji batas bawah)
     H₀₂: θ ≥ +Δ  vs  H₁₂: θ < +Δ   (uji batas atas)
 
@@ -75,7 +75,7 @@ Persamaan (11): Uji Kesetaraan TOST (Two One-Sided Tests)
 
     Referensi: Schuirmann (1987); Lakens (2017).
 
-Persamaan (12): Bootstrap Confidence Interval untuk Median
+Persamaan (8): Bootstrap Confidence Interval untuk Median
     CI(1-α) = [θ*_(α/2) , θ*_(1-α/2)]
 
     di mana:
@@ -300,7 +300,7 @@ def tost_equivalence(group_a: np.ndarray, group_b: np.ndarray,
                      margin: float, label_a: str, label_b: str,
                      alpha: float = 0.05) -> dict:
     r"""
-    Uji kesetaraan TOST (Two One-Sided Tests) — Persamaan (11).
+    Uji kesetaraan TOST (Two One-Sided Tests) — Persamaan (7).
 
     Menguji apakah dua kelompok setara secara praktis dalam batas
     margin kesetaraan Δ (equivalence margin).
@@ -364,7 +364,7 @@ def bootstrap_median_ci(data: np.ndarray, n_boot: int = 10000,
                         confidence: float = 0.95,
                         seed: int = 42) -> tuple:
     r"""
-    Bootstrap 95% CI untuk median — Persamaan (12).
+    Bootstrap 95% CI untuk median — Persamaan (8).
 
     Menghasilkan confidence interval menggunakan metode percentile
     bootstrap (Efron & Tibshirani, 1993).
@@ -420,7 +420,7 @@ def run_analysis():
     print("ANALISIS STATISTIK — ZTA Predictive Authorization Caching")
     print("Persamaan (3): Shapiro-Wilk  |  (4): Mann-Whitney U")
     print("Persamaan (5): Cliff's Delta |  (6): Kruskal-Wallis H")
-    print("Persamaan (11): TOST         |  (12): Bootstrap CI")
+    print("Persamaan (7): TOST          |  (8): Bootstrap CI")
     print("=" * 70)
 
     df = load_data("data/processed/latency-all-scenarios.csv")
@@ -514,7 +514,7 @@ def run_analysis():
     # ── TOST Equivalence Testing ──────────────────────────────────
     results_tost = []
     print("\n" + "─" * 70)
-    print("[Kesetaraan] TOST — Persamaan (11)")
+    print("[Kesetaraan] TOST — Persamaan (7)")
     print("  Klaim: near-zero overhead → memerlukan bukti positif kesetaraan")
     print("  Margin Δ = 5% dari median baseline (konvensi benchmarking)")
     print("─" * 70)
@@ -540,7 +540,7 @@ def run_analysis():
 
     # ── Bootstrap 95% CI ─────────────────────────────────────────
     print("\n" + "─" * 70)
-    print("[CI] Bootstrap 95% Confidence Interval — Persamaan (12)")
+    print("[CI] Bootstrap 95% Confidence Interval — Persamaan (8)")
     print("  Metode: Percentile bootstrap (B = 10.000, seed = 42)")
     print("─" * 70)
 
