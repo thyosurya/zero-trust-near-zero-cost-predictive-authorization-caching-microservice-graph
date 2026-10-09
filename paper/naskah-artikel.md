@@ -495,7 +495,7 @@ Penelitian selanjutnya dapat diarahkan pada: (1) evaluasi pada testbed dengan pa
 
 **Pendanaan:** Penelitian ini tidak menerima pendanaan dari pihak eksternal.
 
-**Ketersediaan Data:** Seluruh data mentah, skrip analisis, dan kode sumber yang digunakan dalam penelitian ini tersedia secara publik pada repositori yang dapat diakses untuk keperluan reproduksi.
+**Ketersediaan Data:** Seluruh data mentah, skrip analisis, dan kode sumber yang digunakan dalam penelitian ini tersedia secara publik pada repositori replikasi: https://github.com/thyosurya/zero-trust-near-zero-cost-predictive-authorization-caching-microservice-graph.
 
 ---
 

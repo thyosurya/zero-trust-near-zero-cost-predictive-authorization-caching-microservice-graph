@@ -487,7 +487,7 @@ Future research may be directed toward several key avenues: (1) evaluating the p
 
 **Funding:** This research received no external funding.
 
-**Data Availability:** All raw experimental datasets, statistical analysis scripts, and source code generated and utilized during this study are publicly available in the dedicated replication repository for reproducibility.
+**Data Availability:** All raw experimental datasets, statistical analysis scripts, and source code generated and utilized during this study are publicly available in the dedicated replication repository: https://github.com/thyosurya/zero-trust-near-zero-cost-predictive-authorization-caching-microservice-graph.
 
 ---
 
